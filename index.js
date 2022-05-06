@@ -29,6 +29,11 @@ const run = async ()=>{
             const product = await collection.findOne(query);
             res.send(product)
         })
+        app.post('/product', async(req, res)=>{
+            const newProduct = req.body;
+            const result = await collection.insertOne(newProduct);
+            res.send(result)
+        })
     }catch(error){
         console.log(error)
 
