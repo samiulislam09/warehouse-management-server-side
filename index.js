@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const port = process.env.port || 5000;
 
@@ -11,20 +11,30 @@ app.use(express.json())
 const uri = "mongodb+srv://bookwarehouse:X1b9ZYpVMQWH3Zhc@cluster0.ewdqd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-app.get('/', (req, res)=>{
-    res.send("hello guys");
-});
-
 const run = async ()=>{
     try{
         await client.connect()
-        console.log('connected')
+        const collection = client.db('book-warehouse').collection('products')
+        
+        app.get("/product", async (req, res)=>{
+            const query = {}
+            const cursor = collection.find(query)
+            const products = await cursor.toArray();
+            res.send(products)
+            
+        })
+        app.get("/product/:id", async(req, res)=>{
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const product = await collection.findOne(query);
+            res.send(product)
+        })
     }catch(error){
         console.log(error)
 
     }
 }
-run()
+run().catch(console.dir)
 
 app.listen(port, ()=>{
     console.log("hello guys im running in", port)
