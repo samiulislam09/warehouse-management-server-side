@@ -41,6 +41,26 @@ const run = async ()=>{
             const result  = await collection.deleteOne(query);
             res.send(result)
         })
+        app.put('/update/:id', async(req, res)=>{
+            const id = req.params.id;
+            const updatedUser = req.body;
+            const query = {_id:ObjectId(id)};
+            const options = {upsert: true};
+            const updateDoc = {
+                $set:{
+                    name:updatedUser.name,
+                    desc:updatedUser.desc,
+                    price:updatedUser.price,
+                    qty:updatedUser.qty,
+                    supplier:updatedUser.supplier,
+                    img:updatedUser.img
+                }
+            }
+            const result = await collection.updateOne(query, updateDoc, options);
+            res.send(result)
+
+        })
+
     }catch(error){
         console.log(error)
 
