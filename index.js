@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
-const port = process.env.port || 5000;
+const port = process.env.PORT || 5000;
 
 const app = express();
 app.use(cors())
@@ -67,6 +67,10 @@ const run = async ()=>{
     }
 }
 run().catch(console.dir)
+
+app.get('/', (req, res)=>{
+    res.send('running server')
+})
 
 app.listen(port, ()=>{
     console.log("hello guys im running in", port)
