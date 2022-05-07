@@ -34,6 +34,13 @@ const run = async ()=>{
             const result = await collection.insertOne(newProduct);
             res.send(result)
         })
+
+        app.delete('/manageinventory/:id', async(req, res)=>{
+            const id = req.params.id;
+            const query = {_id:ObjectId(id)};
+            const result  = await collection.deleteOne(query);
+            res.send(result)
+        })
     }catch(error){
         console.log(error)
 
