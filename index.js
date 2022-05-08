@@ -35,7 +35,7 @@ const run = async ()=>{
             const result = await collection.insertOne(newProduct);
             res.send(result)
         })
-        app.get('/myproduct', async(req, res)=>{
+        app.get('/myitem', async(req, res)=>{
             const email = req.query.email;
             const query = {email:email}
             const cursor = collection.find(query);
@@ -49,6 +49,14 @@ const run = async ()=>{
             const result  = await collection.deleteOne(query);
             res.send(result)
         })
+
+        app.delete('/myitem/:id', async(req, res)=>{
+            const id = req.params.id;
+            const query = {_id:ObjectId(id)};
+            const result  = await collection.deleteOne(query);
+            res.send(result)
+        })
+
         app.put('/update/:id', async(req, res)=>{
             const id = req.params.id;
             const updatedUser = req.body;
@@ -56,6 +64,7 @@ const run = async ()=>{
             const options = {upsert: true};
             const updateDoc = {
                 $set:{
+                    email:updatedUser.email,
                     name:updatedUser.name,
                     desc:updatedUser.desc,
                     price:updatedUser.price,
