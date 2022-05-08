@@ -35,6 +35,13 @@ const run = async ()=>{
             const result = await collection.insertOne(newProduct);
             res.send(result)
         })
+        app.get('/myproduct', async(req, res)=>{
+            const email = req.query.email;
+            const query = {email:email}
+            const cursor = collection.find(query);
+            const myproducts = await cursor.toArray();
+            res.send(myproducts)
+        })
 
         app.delete('/manageinventory/:id', async(req, res)=>{
             const id = req.params.id;
